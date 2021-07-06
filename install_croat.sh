@@ -25,7 +25,7 @@ WALLET_RESTORE_FROM_PKEY=""    # "CxDe..priv_key..Nrd"            - wallet priva
 
 ## POOL CONFIGS
 POOLFQDN="pool.example.com"    # "pool.example.com" or ip "11.22.33.111"
-POOLPASSWD="POOLpassw123456"         # Pool Api password and also admin web interface
+POOLPASSWD="ChangeMe"         # Pool Api password and also admin web interface
 POOLEMAIL="pool@example.com"         # Pool email
 POOLTELEGRAM="https://t.me/CroatPool"
 POOLDISCORD="https://discordapp.com/invite/CroatPool"
