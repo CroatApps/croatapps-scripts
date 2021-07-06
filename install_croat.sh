@@ -24,7 +24,7 @@ WALLET_RESTORE_FROM_FILE=""    # "/home/user/wallet_name.wallet"  - path and nam
 WALLET_RESTORE_FROM_PKEY=""    # "CxDe..priv_key..Nrd"            - wallet private key
 
 ## POOL CONFIGS
-POOLFQDN="croatpool.servertt.com"    # "pool.example.com" or ip "11.22.33.111"
+POOLFQDN="pool.example.com"    # "pool.example.com" or ip "11.22.33.111"
 POOLPASSWD="POOLpassw123456"         # Pool Api password and also admin web interface
 POOLEMAIL="pool@example.com"         # Pool email
 POOLTELEGRAM="https://t.me/CroatPool"
@@ -646,29 +646,25 @@ EOF
 pool_build(){
     exec_cmd "apt-get install -y libssl-dev libboost-all-dev libsodium-dev jq > /dev/null 2>&1"
     cd $USER_HOME
-    exec_cmd "$RUNASUSER git clone https://github.com/dvandal/cryptonote-nodejs-pool.git pool > /dev/null 2>&1"
+    exec_cmd "$RUNASUSER git clone https://github.com/CroatApps/cryptonote-nodejs-pool.git pool > /dev/null 2>&1"
     cd pool
-    sed -i 's/"async": "^3.2.0",/"async": "=1.5.2",/1' package.json
+    #sed -i 's/"async": "^3.2.0",/"async": "=1.5.2",/1' package.json
     exec_cmd "$RUNASUSER npm update > /dev/null 2>&1"
 }
 pool_config(){
-    $RUNASUSER cp config_examples/croat.json croat.json
+    #$RUNASUSER cp config.json croat.json
     POOLADDRESS=$(cat ../croatd/$WALLET_NAME.address)
 
     # comprovar si esta buida, i si es buida aplicar ip 0.0.0.0
     [  -z "$POOLFQDN" ] && POOLHOST="0.0.0.0" || POOLHOST="$POOLFQDN"
 
-    sed -i "s/your.pool.host/$POOLHOST/1" croat.json
-    sed -i 's/http:\/\/blockexplorer.arqma.com\/block\/{id}/http:\/\/explorer.croat.community\/?hash={id}#blockchain_block/1' croat.json
-    sed -i 's/http:\/\/blockexplorer.arqma.com\/tx\/{id}/http:\/\/explorer.croat.community\/?hash={id}#blockchain_transaction/1' croat.json
-    sed -i 's/"cnBlobType": 2,/"cnBlobType": 0,\n"offset": 3,/1' croat.json
-    sed -i 's/"ssl": true/"ssl": false/1' croat.json
-    sed -i "s/\*\* Your pool wallet address \*\*/$POOLADDRESS/1" croat.json
-    sed -i "s/your_password/$POOLPASSWD/1" croat.json
-    sed -i 's/"addressSeparator": "."/"addressSeparator": "+"/2' croat.json
-    jq . croat.json > config.json
-    rm croat.json
-    chown $USER:$USER config.json
+    sed -i "s/your.pool.host/$POOLHOST/1" config.json
+    sed -i 's/"ssl": true/"ssl": false/1' config.json
+    sed -i "s/\*\* Your pool wallet address \*\*/$POOLADDRESS/1" config.json
+    sed -i "s/your_password/$POOLPASSWD/1" config.json
+    #$RUNASUSER jq . croat.json > config.json
+    #rm croat.json
+    #chown $USER:$USER config.json
 
 }
 pool_service(){
@@ -728,8 +724,8 @@ var discord = "$POOLDISCORD";
 
 var marketCurrencies = ["{symbol}-BTC", "{symbol}-USD", "{symbol}-EUR"];
 
-var blockchainExplorer = "http://explorer.croat.community/?hash={id}";
-var transactionExplorer = "http://explorer.croat.community/?hash={id}";
+var blockchainExplorer = "http://explorer.croat.community/?hash={id}#blockchain_block";
+var transactionExplorer = "http://explorer.croat.community/?hash={id}#blockchain_transaction";
 
 var themeCss = "themes/default.css";
 var defaultLang = "ca";
