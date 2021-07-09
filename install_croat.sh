@@ -15,8 +15,8 @@ SCRIPT_HOME="/opt/Croat"       # Defaults to "/opt/Croat", leave it blank to use
 NODE_TIMEOUT="180"             # Timeout used by tail to wait until node is fully synced
 
 ## WALLET CONFIGS
-WALLET_NAME="poolwallet"       # Name for the wallet
-WALLET_PASSWD="change_me"      # Password for that wallet
+WALLET_NAME="pool1wallet"      # Name for the wallet
+WALLET_PASSWD="Pass1234"       # Password for that wallet
 WALLET_TIMEOUT="90"            # Timeout used by tail to wait until wallet is synced
 # Wallet restore should BE only one of them filled, otherwise Mnemo will be used to recover
 WALLET_RESTORE_FROM_MNEMO=""   # "word1 word2 word3 .. word25"    - wallet mnemo
@@ -24,26 +24,26 @@ WALLET_RESTORE_FROM_FILE=""    # "/home/user/wallet_name.wallet"  - path and nam
 WALLET_RESTORE_FROM_PKEY=""    # "CxDe..priv_key..Nrd"            - wallet private key
 
 ## POOL CONFIGS
-POOLFQDN="pool.example.com"    # "pool.example.com" or ip "11.22.33.111"
-POOLPASSWD="ChangeMe"         # Pool Api password and also admin web interface
-POOLEMAIL="pool@example.com"         # Pool email
+POOLFQDN=""                                          # "pool.example.com" or ip "11.22.33.111"
+POOLPASSWD="POOLpass1234"                            # Pool Api password and also admin web interface
+POOLEMAIL="pool@example.com"                         # Pool email
 POOLTELEGRAM="https://t.me/CroatPool"
 POOLDISCORD="https://discordapp.com/invite/CroatPool"
-POOLBACKUP=""                        # "/home/user/redis/dump.rdb" Full route to redis rdb backup file
+POOLBACKUP=""                                        # "/home/user/redis/dump.rdb" Full route to redis rdb backup file
 
-## OPTIONALS SETUP AND CONFIGS
-SETUP_LOGROTATE="no"
+## OPTIONALS SETUP AND CONFIGS, needs INSTALL_OPTIONALS="yes"
+SETUP_LOGROTATE="yes"
+SETUP_REDIS_BACKUP="yes"
 SETUP_FAIL2BAN="no"
 SETUP_UFW="no"
-SETUP_REDIS_BACKUP="no"
-BACKUP_REDIS_DIR=""
+
 
 
 ################################################################################
 ######     DO NOT TOUCH CODE'S BELLOW                                     ######
 ################################################################################
 SCRIPTVER="1"
-SCRIPTREV="0.2"
+SCRIPTREV="0.3"
 
 export DEBIAN_FRONTEND=noninteractive
 
@@ -646,25 +646,29 @@ EOF
 pool_build(){
     exec_cmd "apt-get install -y libssl-dev libboost-all-dev libsodium-dev jq > /dev/null 2>&1"
     cd $USER_HOME
-    exec_cmd "$RUNASUSER git clone https://github.com/CroatApps/cryptonote-nodejs-pool.git pool > /dev/null 2>&1"
+    exec_cmd "$RUNASUSER git clone https://github.com/dvandal/cryptonote-nodejs-pool.git pool > /dev/null 2>&1"
     cd pool
-    #sed -i 's/"async": "^3.2.0",/"async": "=1.5.2",/1' package.json
+    sed -i 's/"async": "^3.2.0",/"async": "=1.5.2",/1' package.json
     exec_cmd "$RUNASUSER npm update > /dev/null 2>&1"
 }
 pool_config(){
-    #$RUNASUSER cp config.json croat.json
+    $RUNASUSER cp config_examples/croat.json croat.json
     POOLADDRESS=$(cat ../croatd/$WALLET_NAME.address)
 
     # comprovar si esta buida, i si es buida aplicar ip 0.0.0.0
     [  -z "$POOLFQDN" ] && POOLHOST="0.0.0.0" || POOLHOST="$POOLFQDN"
 
-    sed -i "s/your.pool.host/$POOLHOST/1" config.json
-    sed -i 's/"ssl": true/"ssl": false/1' config.json
-    sed -i "s/\*\* Your pool wallet address \*\*/$POOLADDRESS/1" config.json
-    sed -i "s/your_password/$POOLPASSWD/1" config.json
-    #$RUNASUSER jq . croat.json > config.json
-    #rm croat.json
-    #chown $USER:$USER config.json
+    sed -i "s/your.pool.host/$POOLHOST/1" croat.json
+    sed -i 's/http:\/\/blockexplorer.arqma.com\/block\/{id}/http:\/\/explorer.croat.community\/?hash={id}#blockchain_block/1' croat.json
+    sed -i 's/http:\/\/blockexplorer.arqma.com\/tx\/{id}/http:\/\/explorer.croat.community\/?hash={id}#blockchain_transaction/1' croat.json
+    sed -i 's/"cnBlobType": 2,/"cnBlobType": 0,\n"offset": 3,/1' croat.json
+    sed -i 's/"ssl": true/"ssl": false/1' croat.json
+    sed -i "s/\*\* Your pool wallet address \*\*/$POOLADDRESS/1" croat.json
+    sed -i "s/your_password/$POOLPASSWD/1" croat.json
+    sed -i 's/"addressSeparator": "."/"addressSeparator": "+"/2' croat.json
+    jq . croat.json > config.json
+    rm croat.json
+    chown $USER:$USER config.json
 
 }
 pool_service(){
@@ -724,8 +728,8 @@ var discord = "$POOLDISCORD";
 
 var marketCurrencies = ["{symbol}-BTC", "{symbol}-USD", "{symbol}-EUR"];
 
-var blockchainExplorer = "http://explorer.croat.community/?hash={id}#blockchain_block";
-var transactionExplorer = "http://explorer.croat.community/?hash={id}#blockchain_transaction";
+var blockchainExplorer = "http://explorer.croat.community/?hash={id}";
+var transactionExplorer = "http://explorer.croat.community/?hash={id}";
 
 var themeCss = "themes/default.css";
 var defaultLang = "ca";
@@ -741,26 +745,53 @@ install_pool(){
     pool_frontend
 }
 
-logrotate_config(){
-    exit 1
+ops_logrotate(){
+    $RUNASUSER mkdir -p $USER_HOME/utils/rotate
+    $RUNASUSER touch $USER_HOME/utils/rotate/logrotate.conf
+    cat << EOF >> $USER_HOME/utils/rotate/logrotate.conf
+$USER_HOME/croatd/logs/*.log {
+    daily
+    rotate 7
+    missingok
+    compress
+    create
 }
-cron_bk_redis(){
+
+$USER_HOME/pool/logs/*.log {
+    daily
+    rotate 7
+    missingok
+    compress
+    create
+}
+EOF
+    $RUNASUSER crontab -l > crontmp
+    $RUNASUSER echo "0 23 * * * /usr/sbin/logrotate $USER_HOME/utils/rotate/logrotate.conf --state $USER_HOME/utils/rotate/logrotate-state" >> crontmp
+    $RUNASUSER crontab crontmp
+    $RUNASUSER rm crontmp
+}
+ops_bk_redis(){
     exec_cmd "apt-get install -y rdiff-backup > /dev/null 2>&1"
+    $RUNASUSER mkdir -p $USER_HOME/utils/backups/redis
     #write out current crontab
     $RUNASUSER crontab -l > crontmp
     #echo new cron into cron file
-    $RUNASUSER echo "0 */4 * * * rdiff-backup --preserve-numerical-ids --no-file-statistics /var/lib/redis $USER_HOME/backups/redis" >> crontmp
+    $RUNASUSER echo "0 */4 * * * rdiff-backup --preserve-numerical-ids --no-file-statistics /var/lib/redis $USER_HOME/utils/backups/redis" >> crontmp
     #install new cron file
     $RUNASUSER crontab crontmp
     $RUNASUSER rm crontmp
 }
-extra_configs(){
-    cron_bk_redis
-    config_ufw
-    config_fail2ban
+ops_fail2ban(){
+    echo "TODO list"
+}
+ops_ufw(){
+    echo "TODO list"
 }
 install_ops(){
-    echo ""
+    if [[  "$SETUP_LOGROTATE" = "yes"  ]] ; then ops_logrotate ; fi
+    if [[  "$SETUP_REDIS_BACKUP" = "yes"  ]] ; then ops_bk_redis ; fi
+    if [[  "$SETUP_FAIL2BAN" = "yes"  ]] ; then ops_fail2ban ; fi
+    if [[  "$SETUP_UFW" = "yes"  ]] ; then ops_ufw ; fi
 }
 
 
@@ -771,8 +802,6 @@ check_usersudo
 install_dependencies
 get_vars
 check_installs
-install_ops(){
-    exit 1
-}
+
 
 exit 0
