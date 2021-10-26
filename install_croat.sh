@@ -259,7 +259,7 @@ node_fastsync(){
     cd $USER_HOME/.croat ; rm $USER_HOME/.croat/*
     print_status "Syncronizing Croat-node with FastSync ..."
     #$RUNASUSER wget http://192.168.1.111/CROAT-BlockChain-LAST.tar.gz
-    $RUNASUSER curl http://blockchain.croat.community/CROAT-BlockChain-LAST.tar.gz -o CROAT-BlockChain-LAST.tar.gz
+    $RUNASUSER curl https://blockchain.croat.community/CROAT-BlockChain-LAST.tar.gz -o CROAT-BlockChain-LAST.tar.gz
     #$RUNASUSER cp ../CROAT-BlockChain-LAST.tar.gz .
 
     exec_cmd "$RUNASUSER tar -xvf CROAT-BlockChain-LAST.tar.gz > /dev/null 2>&1"
