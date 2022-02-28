@@ -1,12 +1,5 @@
 # croatapps-scripts
 
-Runs in a basic ubuntu 20.04 server/desktop.
-Run with user + sudo
-
-
-
-# croatapps-scripts
-
 In order to run this scripts you must have an Ubuntu 20.04 server/desktop base already setup. You can be connected in local or via SSH.
 
 
@@ -16,12 +9,11 @@ In order to run this scripts you must have an Ubuntu 20.04 server/desktop base a
 2. Edit variables to tune up your environment setup.
 3. Run the script and wait until finish setting all up and ready to go.
 
+<details><summary><b>Show instructions</b></summary>
 
 ### Download
 
 Choose from below using `wget` or `curl` for download.
-
-<details><summary><b>Show instructions</b></summary>
 
 A. Download it using `wget`:
 
@@ -40,8 +32,6 @@ B. Download it using `curl`:
 
 For configuring the variables, we will be using `nano`, but you can chose whatever editing tools like.
 
-<details><summary><b>Show instructions</b></summary>
-
 1. Edit using `nano`:
 
     ```sh
@@ -52,8 +42,6 @@ For configuring the variables, we will be using `nano`, but you can chose whatev
 
 
 ### Run it
-
-<details><summary><b>Show instructions</b></summary>
 
 1. Run must be done with `sudo` rights but can't be done under user `root` account:
 
