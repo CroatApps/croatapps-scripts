@@ -2,6 +2,8 @@
 
 In order to run this scripts you must have an Ubuntu 20.04 server/desktop base already setup. You can be connected in local or via SSH.
 
+<img src="https://avatars.githubusercontent.com/u/37509725?v=4" align="right"
+     alt="CroatApps logo" width="200" height="200">
 
 ## How It Works
 
