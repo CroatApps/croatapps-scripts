@@ -37,7 +37,7 @@ For configuring the variables, we will be using `nano`, but you can chose whatev
 1. Edit using `nano`:
 
     ```sh
-    nano -l install_croat.sh
+     nano -l install_croat.sh
     ```
 
 2. The most important variables are between lines 8-12, this ones tells the script if it will be a simple node, needs a wallet, it needs the pool setup... Please do not edit lines below line 40 unless you know what you are doing.
