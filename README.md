@@ -45,7 +45,13 @@ For configuring the variables, we will be using `nano`, but you can chose whatev
 
 ### Run it
 
-1. Run must be done with `sudo` rights but can't be done under user `root` account:
+1. Make it executable
+
+    ```sh
+    $ chmod +x install_croat.sh
+    ```
+
+2. Run must be done with `sudo` rights but can't be done under user `root` account:
 
     ```sh
     $ sudo install_croat.sh
