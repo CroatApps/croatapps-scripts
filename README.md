@@ -15,19 +15,17 @@ In order to run this scripts you must have an Ubuntu 20.04 server/desktop base a
 
 ### Download
 
-Choose from below using `wget` or `curl` for download.
+Choose A or B from below using `wget` or `curl` for download.
 
 A. Download it using `wget`:
 
-   ```sh
-     wget https://github.com/CroatApps/croatapps-scripts/raw/main/install_croat.sh
-    ```
+wget https://github.com/CroatApps/croatapps-scripts/raw/main/install_croat.sh
+
 
 B. Download it using `curl`:
 
-   ```sh
-     curl https://github.com/CroatApps/croatapps-scripts/raw/main/install_croat.sh
-    ```
+curl https://github.com/CroatApps/croatapps-scripts/raw/main/install_croat.sh
+
 
 
 ### Edit variables
