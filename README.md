@@ -19,14 +19,15 @@ Choose A or B from below using `wget` or `curl` for download.
 
 A. Download it using `wget`:
 
-wget https://github.com/CroatApps/croatapps-scripts/raw/main/install_croat.sh
-
+```sh
+ wget https://github.com/CroatApps/croatapps-scripts/raw/main/install_croat.sh
+```
 
 B. Download it using `curl`:
 
-    ```sh
-     curl https://github.com/CroatApps/croatapps-scripts/raw/main/install_croat.sh
-    ```
+```sh
+ curl https://github.com/CroatApps/croatapps-scripts/raw/main/install_croat.sh
+```
 
 
 ### Edit variables
