@@ -24,8 +24,9 @@ wget https://github.com/CroatApps/croatapps-scripts/raw/main/install_croat.sh
 
 B. Download it using `curl`:
 
+    ```sh
 curl https://github.com/CroatApps/croatapps-scripts/raw/main/install_croat.sh
-
+    ```
 
 
 ### Edit variables
