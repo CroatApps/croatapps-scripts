@@ -28,7 +28,7 @@ POOLFQDN=""                                          # "pool.example.com" or ip 
 POOLPASSWD="POOLpass1234"                            # Pool Api password and also admin web interface
 POOLEMAIL="pool@example.com"                         # Pool email
 POOLTELEGRAM="https://t.me/CroatPool"                # Pool Telegram link
-POOLDISCORD="https://discordapp.com/invite/CroatPool"# Pool Discord link
+POOLDISCORD="https://discordapp.com/invite/Croat"    # Pool Discord link
 POOLBACKUP=""                                        # "/home/user/redis/dump.rdb" Full route to redis rdb backup file
 
 ## OPTIONALS SETUP AND CONFIGS, needs INSTALL_OPTIONALS="yes"
