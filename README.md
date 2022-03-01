@@ -20,13 +20,13 @@ Choose from below using `wget` or `curl` for download.
 A. Download it using `wget`:
 
     ```sh
-    $ wget https://github.com/CroatApps/croatapps-scripts/raw/main/install_croat.sh
+    wget https://github.com/CroatApps/croatapps-scripts/raw/main/install_croat.sh
     ```
 
 B. Download it using `curl`:
 
     ```sh
-    $ curl https://github.com/CroatApps/croatapps-scripts/raw/main/install_croat.sh
+    curl https://github.com/CroatApps/croatapps-scripts/raw/main/install_croat.sh
     ```
 
 
@@ -37,7 +37,7 @@ For configuring the variables, we will be using `nano`, but you can chose whatev
 1. Edit using `nano`:
 
     ```sh
-    $ nano -l install_croat.sh
+    nano -l install_croat.sh
     ```
 
 2. The most important variables are between lines 8-12, this ones tells the script if it will be a simple node, needs a wallet, it needs the pool setup... Please do not edit lines below line 40 unless you know what you are doing.
@@ -48,13 +48,13 @@ For configuring the variables, we will be using `nano`, but you can chose whatev
 1. Make it executable
 
     ```sh
-    $ chmod +x install_croat.sh
+    chmod +x install_croat.sh
     ```
 
 2. Run must be done with `sudo` rights but can't be done under user `root` account:
 
     ```sh
-    $ sudo install_croat.sh
+    sudo ./install_croat.sh
     ```
 
 ### Ending
