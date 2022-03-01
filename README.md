@@ -19,15 +19,15 @@ Choose from below using `wget` or `curl` for download.
 
 A. Download it using `wget`:
 
-
-    wget https://github.com/CroatApps/croatapps-scripts/raw/main/install_croat.sh
-
+   ```sh
+     wget https://github.com/CroatApps/croatapps-scripts/raw/main/install_croat.sh
+    ```
 
 B. Download it using `curl`:
 
-
-    curl https://github.com/CroatApps/croatapps-scripts/raw/main/install_croat.sh
-
+   ```sh
+     curl https://github.com/CroatApps/croatapps-scripts/raw/main/install_croat.sh
+    ```
 
 
 ### Edit variables
@@ -48,13 +48,13 @@ For configuring the variables, we will be using `nano`, but you can chose whatev
 1. Make it executable
 
     ```sh
-    chmod +x install_croat.sh
+     chmod +x install_croat.sh
     ```
 
 2. Run must be done with `sudo` rights but can't be done under user `root` account:
 
     ```sh
-    sudo ./install_croat.sh
+     sudo ./install_croat.sh
     ```
 
 ### Ending
